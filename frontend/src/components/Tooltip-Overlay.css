@@ -1,0 +1,28 @@
+.tooltip-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+
+}
+.tooltip {
+    position:absolute;
+    top:0;
+    left:0;
+    padding: 10px;
+    /*height: 50px;*/
+    /*width:50px;*/
+    max-width:400px;
+    border: solid 2px #293132;
+    background-image: url("../images/paper-bg.jpg");
+    pointer-events:none
+
+}
+.tooltip:hover {
+    display:none;
+}
+.item-description {
+    margin: 10px 0;
+}

@@ -1,0 +1,76 @@
+.search-container {
+    display:flex;
+    justify-content: center;
+    margin: 0 50px 20px;
+    padding-top: 50px;
+
+}
+
+.search-container > input {
+    height: 30px;
+    padding: 10px;
+}
+/* TODO: get rid of/repurpose button */
+.search-container > button {
+    width: 50px;
+    display:none;
+}
+.search-container > input, .search-container i {
+    font-size: 20px;
+}
+
+.results-row {
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*align-items: flex-start;*/
+    /*justify-content: center;*/
+    position:relative;
+}
+.search-results {
+    background-color: coral;
+
+    margin:20px auto;
+    width:500px;
+    /*overflow-x:scroll;*/
+    /*overflow-y:hidden;*/
+    white-space: nowrap;
+
+}
+.search-results > ul {
+     margin: 0;
+     padding: 10px;
+     height:100px
+}
+.search-results .results-list-item {
+    list-style: none;
+    display: inline-block;
+    margin:10px;
+}
+.search-results .draggable-item {
+
+}
+.destroy-item {
+    height: 100px;
+    width: 100px;
+    background-color: salmon;
+    border-radius: 5px;
+    position: absolute;
+    top:0;
+    left: calc(50% + 300px);
+    text-align: center;
+    color: darkred;
+    font-weight: bold;
+}
+.destroy-item:after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content: "\274c";
+    font-size: 50px;
+    color: darkred;
+    line-height: 100px;
+    text-align: center;
+    stroke:transparent
+}

@@ -1,0 +1,10 @@
+.item-stack-ui {
+    display: grid;
+    grid-template-columns: 24px auto 24px;
+    width: 100%;
+}
+
+.item-stack-count {
+    text-align: center;
+    user-select: none;
+}

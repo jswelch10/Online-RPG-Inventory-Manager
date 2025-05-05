@@ -1,0 +1,19 @@
+variableName: {
+  stringName,
+  categories: [],
+  cost: {
+    type (string),
+    amount (int)
+  },
+  size ->slots
+  containerLimit? sm md lg? 1 2 3?
+  slotCount?
+  stackCount
+  is_container
+  is_kit?
+  containerSize? sm md lg? 1 2 3?
+
+  slotType: "1h", "2h", "container"
+  text
+  charges
+}

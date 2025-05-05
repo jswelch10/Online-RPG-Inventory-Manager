@@ -1,0 +1,40 @@
+.banner {
+    text-align:center;
+    position: fixed;
+    background-color: tan;
+    width: 100%;
+    z-index: 10;
+    padding: 10px 0;
+    transform:translateY(0);
+    transition: transform .4s ease;
+    top:0;
+}
+.banner.minimized {
+    transform: translateY(-100%)
+}
+
+.banner-toggle {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin: 0;
+    padding: 5px 15px 5px 30px;
+    clip-path: polygon(0px 0, 100% 0, calc(100% - 0px) 100%, 20px 100%);
+    background-color: tan;
+    transform: translateY(-1px);
+}
+
+.arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    transition: border-color .2s ease;
+}
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+.banner-toggle:hover .arrow {
+    border-color: white;
+}

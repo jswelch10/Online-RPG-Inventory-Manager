@@ -1,0 +1,180 @@
+.packData {
+    display:flex;
+}
+.packData:nth-child(n+4) {
+    flex-direction: row-reverse;
+}
+.packData:nth-child(n+4) .containerData {
+    flex-direction: row;
+}
+.packData:nth-child(n+4) .containerStatus label {
+    display:none;
+}
+
+.containerData {
+    display:flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    font-size: 45px;
+    font-family: monospace;
+    margin: 0 10px;
+}
+.containerName {
+    height: 60px;
+    width:120px;
+    font-size: 24px;
+
+}
+.containerData input {
+    text-align: center;
+    margin:20px;
+    border: none;
+}
+.pack {
+    position:relative
+}
+
+.pack-background, .pack-items {
+    display: flex;
+    position: relative;
+    align-items: center;
+    place-self: center;
+    margin: 20px;
+}
+.pack-background {
+    width: 400px;
+    height: 150px;
+    background-color: lightseagreen;
+    justify-content: center;
+    /*border: solid 2px black;*/
+    /*display: flex;*/
+    /*position: relative;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    /*place-self: center;*/
+    /*margin: 20px;*/
+}
+.pack-items {
+    position:absolute;
+    top:50px;
+    left:55px;
+    justify-content: start;
+
+    gap:30px;
+    margin:0px;
+    width: 330px;
+    height: 90px
+
+}
+.pack .join-bar-bg {
+    width: 63.333%;
+    height: 80px;
+    background-color: white;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    text-align: right;
+
+}
+.pack .pack-segment-bg {
+    height: 100px;
+    width: 100px;
+    background-color: white;
+    margin-right: 20px;
+    display:flex;
+}
+
+.pack-segment-bg:last-child {
+    margin-right: 0;
+}
+/*.draggable-item {*/
+/*    width:90px;*/
+/*    height:90px;*/
+/*    background-color: red;*/
+/*    z-index: 10*/
+/*}*/
+
+.containerStatus {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.statusOption {
+    display:flex;
+    margin: 10px 0;
+}
+
+.armorData {
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    background-color: white;
+
+    /*background-image:linear-gradient(to left bottom, transparent 50%, tan 50%);*/
+
+}
+.armorData--1, .armorData--2, .armorData--3 {
+    flex-direction: column-reverse;
+    background-color: #293132;
+}
+.armorData p {
+    /*padding: 5px;*/
+    background-color: white;
+    clip-path: polygon(0px 0, 100% 0, calc(100% - 20px) 100%, 20px 100%);
+    padding: 5px 40px;
+    margin: 0;
+    font-weight: bold;
+    transform: translateY(-1px);
+}
+.armorData--4, .armorData--5 p {
+    background-color: darkgray;
+}
+.armorData--5, .armorData--6 p {
+    background-color: lightgray;
+}
+
+.armorData--6  {
+    background-color: tan;
+}
+
+.armorData:last-child {
+    /*background-color: tan;*/
+
+}
+.slot-item--1,.slot-item--2,.slot-item--3 {
+    /*z-index: 10*/
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.slot-item--1 {
+    background-color: red;
+    width:90px;
+    height: 90px;
+}
+.slot-item--2 {
+    background-color: green;
+    width:210px;
+    height: 90px;
+    /*margin:auto;*/
+}
+.slot-item--3 {
+    background-color: blue;
+    width:330px;
+    height: 90px;
+    /*margin:auto;*/
+}
+.draggable-item {
+    display: inline-block;
+    position:relative;
+    z-index:1;
+}
+
+.tooltip-active > * {
+    background-color:purple !important;
+    /* TODO: remove after testing */
+}
+
+/*FOR UNUSABLE SLOTS -> #FF4646 <- Imperial Red */

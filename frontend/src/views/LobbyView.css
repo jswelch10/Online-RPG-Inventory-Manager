@@ -1,0 +1,28 @@
+.lobby-view {
+    background-color: darkgray;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}
+
+.lobby-info {
+    background-color: lightgray;
+    width: 400px;
+    padding:100px;
+
+}
+#campaign-selector {
+    display:block;
+}
+.lobby-info button {
+    display:block;
+}
+
+.lobby-id span {
+    font-weight: bold;
+}
