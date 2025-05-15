@@ -3,11 +3,10 @@ import {nanoid} from "nanoid"
 
 /**
  *
- * @param data
+ * @param initState
  * @returns {{}}
  */
-export default function generateInventorySliceData(initState) {
-    // const playerId = data?.playerId ? data.playerId : nanoid(6)//
+export default function generateInventorySliceData(initState = null) {
     console.log(initState)
     const initPackState = (params) => {
         const defaultValues = {
@@ -56,7 +55,6 @@ export default function generateInventorySliceData(initState) {
     }
 
     return [
-        // [playerId]: [
             placeItemInPack({size:1, startSlot:2}), //TODO: remove startSlot maybe?
             placeItemInPack({size:2, startSlot:1}),
             placeItemInPack({size:3, startSlot:0}),

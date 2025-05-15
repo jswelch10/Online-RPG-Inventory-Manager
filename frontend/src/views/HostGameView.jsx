@@ -2,10 +2,10 @@
 import react from 'react'
 import {useSelector} from 'react-redux'
 import ContextWrapper from "../components/ContextWrapper";
-import PlayerView from "./PlayerView";
+import PlayerGameView from "./PlayerGameView";
 import {store} from "../components/store";
 
-function HostView() {
+function HostGameView() {
     const players = useSelector(state => state.inventory)
     const lobbyId = useSelector(state => state.websocket.lobbyId)
 
@@ -15,18 +15,29 @@ function HostView() {
     const playersArr = []
     // console.log('Object.keys: ', Object.keys(players))
     if(Object.keys(players).length > 0) {
-        for(const playerId in players) {
-            playersArr.push({playerId, packs:players[playerId]})
+        for(const player in players) {
+            if(player !== 'tourist') {
+                playersArr.push({
+                    playerId: players[player].playerId,
+                    characterName:players[player].characterName,
+                    characterId: player,
+                    inventory:players[player].inventory
+                })
+            }
+
         }
     }
     // console.log(playersArr)
     const playersRender = playersArr.length > 0 ? playersArr.filter(player => player.playerId !== 'tourist').map(player => {
-        // console.log("inside host view playersrender: ", player))
+        // console.log("inside host view playersrender: ", player)
         return <>
 
-            <PlayerView key={player.playerId} playerId={player.playerId}>
-                <h1>{`${player.name}: ${player.playerId}`}</h1>
-            </PlayerView>
+            <PlayerGameView key={player.playerId}
+                            playerId={player.playerId}
+                            characterId={player.characterId}
+            >
+                <h1>{`${player.characterName}: ${player.playerId}: ${player.characterId}`}</h1>
+            </PlayerGameView>
         </>
     }) : null
 
@@ -49,4 +60,4 @@ function HostView() {
 
 }
 
-export default HostView
+export default HostGameView

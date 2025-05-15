@@ -14,17 +14,22 @@ export default function Item (props) {
         ...props.data,
         isResult: props.isResult,
         playerId: props.playerId,
-        packId: props.packId
+        packId: props.packId,
+        characterId: props.characterId
     }
+
+    // console.log("item player Id: ", data.playerId)
     // console.log(props.isResult)
     if (data.isResult) data.id = `result-${nanoid(5)}`
     // console.log('playerId associated to item: ', props.playerId)
 
     const packIndex = props.packSlotNumber
     const itemIndex = props.itemSlotNumber
-    const {playerId} = props
+    const {characterId, playerId} = props
+    // const {playerId} = props
     const counter = !data.isResult ? useSelector(state => {
-        return state.inventory[playerId][packIndex].items[itemIndex].currentStackCount
+        // console.log(state.inventory, characterId)
+        return state.inventory[characterId].inventory[packIndex].items[itemIndex].currentStackCount
     }) : 1
     const dispatch = useDispatch()
     const wsDispatch = useWsDispatch(dispatch, useSelector)
@@ -37,9 +42,9 @@ export default function Item (props) {
             'shift': e.shiftKey
         };
         if(isWSConnected){
-            wsDispatch(incrementItem({packIndex, itemIndex, mods, playerId}))
+            wsDispatch(incrementItem({packIndex, itemIndex, mods, characterId}))
         } else {
-            dispatch(incrementItem({packIndex, itemIndex, mods, playerId}))
+            dispatch(incrementItem({packIndex, itemIndex, mods, characterId}))
         }
 
 
@@ -51,9 +56,9 @@ export default function Item (props) {
             'shift': e.shiftKey
         };
         if(isWSConnected){
-            wsDispatch(decrementItem({packIndex, itemIndex, mods, playerId}))
+            wsDispatch(decrementItem({packIndex, itemIndex, mods, characterId, playerId}))
         } else {
-            dispatch(decrementItem({packIndex, itemIndex, mods, playerId}))
+            dispatch(decrementItem({packIndex, itemIndex, mods, characterId, playerId}))
         }
     }
     const itemStackCounter = data.maxStackCount > 1 ?

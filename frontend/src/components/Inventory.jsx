@@ -4,31 +4,32 @@ import { useSelector } from "react-redux";
 
 //TODO: maybe needs {packIds} param?
 export default function Inventory(props) {
-    // const isHost = useSelector(state => state.view.currentView === 'host')
+
+    console.log("inventory props:", props.playerId || 'tourist')
+
     const playerId = props.playerId || 'tourist'
-    // console.log(playerId)
-    const packs = useSelector(state => state.inventory[playerId]) || []
+    const characterId = props.characterId || 'tourist'
+
+
     // const test = useSelector(state => state.inventory)
-    // console.log(packs, test)
-    // const packsFromInventory = useSelector((state) => state.inventory)
-    // const packsFromWebsocket = useSelector(state => state.websocket.players[props.playerId])
-    // console.log(packs)
-    // const packs = isHost ? packsFromWebsocket : packsFromInventory
-    // const isHost = useSelector(state => state.view.currentView) === 'host'
-    // console.log('isHost', isHost)
-    // console.log('packIDS?', packIds)
+    const inventory = useSelector(state => state.inventory[characterId]?.inventory) || []
+    // const test = useSelector(state => state.inventory)
 
-
-
+    // console.log('inventory selector: ', characterId, test)
 
     return(
         <div className="inventory">
             {
-                packs.map((pack, i) => {
+                inventory.map((pack, i) => {
                     // const p = isHost ? {...pack, id: packIds[i]} : pack
                     // console.log(p)
                     // return <Pack key={p.id} slotNumber={i} packData={p} />
-                    return <Pack key={pack.id} slotNumber={i} packData={pack} playerId={playerId} />
+                    return <Pack key={pack.id}
+                                 slotNumber={i}
+                                 packData={pack}
+                                 playerId={playerId}
+                                 characterId={characterId}
+                    />
                 })
             }
         </div>

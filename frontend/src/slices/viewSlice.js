@@ -2,9 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-    currentView: 'test',
-    userType: 'tourist', //host, player, tourist
-    data: {},
+    currentView: 'test', //host, player, tourist
+    // data: {},
 }
 
 export const viewSlice = createSlice({
@@ -23,40 +22,35 @@ export const viewSlice = createSlice({
             // console.log(action)
             state.currentView = action.payload.view
         },
-        changeUserType: (state, action) => {
-            switch (action.payload) {
-                case 'host':
-                    state.userType = 'host'
-                    break;
-                case 'player':
-                    state.userType = 'player'
-                    break;
-                default:
-                    state.userType = 'tourist'
-            }
-
-        },
         createLobbyView: (state) => {
             state.currentView = 'lobby-host'
-            state.userType = 'host'
+            // state.userType = 'host'
         },
         joinLobbyView: (state) => {
             state.currentView = 'lobby-player'
-            state.userType = 'player'
+            // state.userType = 'player'
         },
         toTestPage: (state) => {
             state.currentView = 'test'
-            state.userType = 'tourist'
+            // state.userType = 'tourist'
+        },
+        toPlayerGameView: state => {
+            state.currentView = 'player'
+        },
+        toHostGameView: state => {
+            state.currentView = 'host'
         }
     }
 })
 
 export const {
     changeView,
-    changeUserType,
+    // changeUserType,
     createLobbyView,
     joinLobbyView,
     toTestPage,
+    toPlayerGameView,
+    toHostGameView,
 } = viewSlice.actions
 
 export default viewSlice.reducer

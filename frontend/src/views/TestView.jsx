@@ -1,13 +1,13 @@
 import react from "react";
 import Banner from "../components/Banner"
-import PlayerView from "./PlayerView";
+import PlayerGameView from "./PlayerGameView";
 
 function TestView() {
 
     return(
         <>
 
-        <PlayerView />
+        <PlayerGameView />
         </>
     )
 

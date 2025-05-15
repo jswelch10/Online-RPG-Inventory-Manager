@@ -3,6 +3,7 @@ import viewReducer from "../slices/viewSlice"
 import inventoryReducer from "../slices/inventorySlice"
 import tooltipReducer from "../slices/tooltipSlice"
 import websocketReducer from "../slices/webSocketSlice"
+// import storageReducer from "../slices/storageSlice"
 import {
     // loggerMiddleware,
     websocketMiddleware,
@@ -15,12 +16,15 @@ export const store = configureStore({
         view : viewReducer,
         inventory: inventoryReducer,
         tooltip: tooltipReducer,
-        websocket: websocketReducer
+        websocket: websocketReducer,
+        // storage: storageReducer
 
     },
     middleware: getDefaultMiddleware=>getDefaultMiddleware()
         // .concat(loggerMiddleware)
 
+        // .concat(storageMiddleware)
         .concat(websocketMiddleware)
         .concat(storageMiddleware)
+
 })

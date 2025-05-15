@@ -18,7 +18,7 @@ export default function createWebSocket(data, storeAPI) {
     //sent from the server
     socket.onmessage = message => {
         const data = JSON.parse(message.data)
-        // console.log('message received: ', data)
+        console.log('message received: ', data)
         storeAPI.dispatch(data)
 
     }

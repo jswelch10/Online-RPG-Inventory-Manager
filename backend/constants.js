@@ -9,8 +9,13 @@ const CONSTANTS = {
     DELETE_ITEM: '',
 
     INCREMENT_ITEM: 'inventory/incrementItem',
-    DECREMENT_ITEM: 'inventory/decrementItem'
+    DECREMENT_ITEM: 'inventory/decrementItem',
     // SET_LOBBY_ID: "websocket/setLobbyId",
+
+    REQUEST_CHARACTER_LIST: 'websocket/requestCharacterList',
+    REQUEST_CHARACTER_INVENTORY: 'websocket/requestCharacterInventory',
+    REQUEST_NEW_INVENTORY: 'inventory/requestNewInventory',
+
 }
 
 // export const {

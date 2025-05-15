@@ -16,7 +16,7 @@
     padding:100px;
 
 }
-#campaign-selector {
+#campaign-selector, #character-selector {
     display:block;
 }
 .lobby-info button {

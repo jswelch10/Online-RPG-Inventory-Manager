@@ -26,7 +26,7 @@ wsServer.on('connection', (socket, req) => {
         //this never gets triggered
 
         // socket.send(Date.now())
-        console.log('trying to trigger socket.onOpen: ', Date.now())
+        // console.log('trying to trigger socket.onOpen: ', Date.now())
         // const response = messageHandler(message)
         ////////////////////socket.send(response)
     })

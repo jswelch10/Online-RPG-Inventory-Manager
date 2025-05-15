@@ -8,7 +8,7 @@ import {useSelector} from "react-redux";
 import {Droppable} from "./Droppable";
 
 
-export default function Pack ({slotNumber, packData, playerId}) {
+export default function Pack ({slotNumber, packData, characterId, playerId}) {
     // console.log('inside pack component: ', playerId)
     // console.log("pack component, packData: ", packData)
 
@@ -16,6 +16,7 @@ export default function Pack ({slotNumber, packData, playerId}) {
         id: packData.id,
         data: {
             playerId,
+            characterId
             //TODO: this could be used to better ferry data to the redux reducers
         },
 
@@ -59,6 +60,7 @@ export default function Pack ({slotNumber, packData, playerId}) {
                                              packId={packData.id}
                                              isResult={false}
                                              playerId={playerId}
+                                             characterId={characterId}
                                 />
                             })}
                         </div>

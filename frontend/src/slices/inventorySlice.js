@@ -4,7 +4,10 @@ import React from "react";
 import generateInventorySliceData from "../../../utils";
 
 const initialState = {
-    'tourist': generateInventorySliceData()
+    'tourist': {  //playerId - rename to inventoryId
+        name: 'tourist', //Character Name
+        inventory: generateInventorySliceData(null)
+    }
 } //returns Pack{}
 function deviateMod(item, mods, isAdded) {
     if(mods.shift) {
@@ -25,14 +28,14 @@ export const inventorySlice = createSlice({
     initialState,
     reducers: {
         incrementItem: (state, action) => {
-            const {packIndex, itemIndex, mods, playerId} = action.payload
-            let item = state[playerId][packIndex].items[itemIndex]
+            const {packIndex, itemIndex, mods, characterId} = action.payload
+            let item = state[characterId].inventory[packIndex].items[itemIndex]
             deviateMod(item, mods, true)
 
         },
         decrementItem: (state, action) => {
-            const {packIndex, itemIndex, mods, playerId} = action.payload
-            let item = state[playerId][packIndex].items[itemIndex]
+            const {packIndex, itemIndex, mods, characterId} = action.payload
+            let item = state[characterId].inventory[packIndex].items[itemIndex]
             deviateMod(item, mods, false)
         },
         addPack: (state) => {
@@ -45,62 +48,52 @@ export const inventorySlice = createSlice({
 
         },
         addItem: (state, action) => {
-            const playerId = action.payload.toPlayer // this should not be gathered from the item, rather the bag
-            const packs = state[playerId]
+            console.log('add item state', current(state), action)
+            const characterId = action.payload.toCharacter // this should not be gathered from the item, rather the bag
+            const {inventory} = state[characterId]
 
-            if(packs) {
+            if(inventory) {
                 const item = {...action.payload.item}
-                const pack = packs.find(pack => pack.id === action.payload.toPack)
+                const pack = inventory.find(pack => pack.id === action.payload.toPack)
 
                 item.packId = pack.id
-                if(item.isResult) {
-                    item.isResult = false
-                    item.id = `item-${nanoid(5)}`
-                    item.currentStackCount = 1
-                }
 
                 pack.currentSize += action.payload.item.size
                 pack.items.push(item)
             }
-            // console.log(packs)
-
-            //NEW SYSTEM NEEDS TO BE DECOUPLED FROM IDs, MAYBE ARRAY LOCATIONS?
-
 
         },
         removeItem: (state, action) => {
-            const playerId = action.payload.fromPlayer
-            console.log("state before removing item: ", current(state), action.payload)
-            // console.log("state before removing item, playerId: ", current(state[playerId]))
-            const packs = state[playerId]
-            if (packs) {
-                const packIndex = packs.findIndex((pack) => {
-                    // console.log(pack.id === action.payload.fromPack, pack.id, action.payload.fromPack)
+            console.log('remove item state', current(state), action)
+            const characterId = action.payload.fromCharacter
+            const {inventory} = state[characterId]
+            if (inventory) {
+
+                const pack = inventory.find(pack => {
+
                     return pack.id === action.payload.fromPack
                 })
-                console.log('remove item internal, packIndex: ', packIndex)
-
-                const pack = packs[packIndex]
-
-                // console.log('remove item internal, packObj: ', pack)
-                packs[packIndex].items = pack.items.filter(item => {
-                    return item.id !== action.payload.item.id
-                })
-                packs[packIndex].currentSize -= action.payload.item.size
+                pack.items = pack.items.filter(item => item.id !== action.payload.item.id)
+                pack.currentSize -= action.payload.item.size
             }
 
         },
 
         //sorts host and players, takes care of host restructure on first pass
         //sorts host and players, destroys test if it exists
-        synchronizePacksData: (state, action) => {
-            console.log(state)
+        synchronizeInventoryData: (state, action) => {
+            console.log("inside syncIData: ", current(state), action)
+            state[action.payload.characterId] = {
+                playerId: action.payload.playerId,
+                characterName: action.payload.characterName,
+                inventory: action.payload.inventory
+            }
+
+
             if(state['tourist']) {
-                console.log("deleting state")
+                // console.log("deleting state")
                 delete state['tourist']
             }
-            state[action.metaData.playerId] = action.payload
-            console.log(state)
         },
         updatePackStatus: (state, action) => {
             const validValues = ["equipped", "dropped", "lost"]
@@ -121,7 +114,7 @@ export const {
     swapPack,
     addItem,
     removeItem,
-    synchronizePacksData,
+    synchronizeInventoryData,
     updatePackStatus
 } = inventorySlice.actions
 

@@ -4,11 +4,10 @@ import LobbyHandler from "./LobbyHandler.js";
 import Lobby from './Lobby.js'
 import generateInventorySliceData from "../utils/index.js";
 
-
 export default function messageHandler(data, socket) {
-
+///////////
     const message = JSON.parse(data)
-    console.log("messageHandler: ", message)
+    // console.log("messageHandler: ", message)
     let lobby
 
 
@@ -19,10 +18,15 @@ export default function messageHandler(data, socket) {
         })
     }
 
-    const routeDataToSocket = ({lobbyId, user}, data, targetId) => {
+    const routeDataToSocket = ({lobbyId, playerId}, data, targetId) => {
         const lobby = LobbyHandler.getLobby(lobbyId)
-        const socket = user === 'host' ?
-            lobby.getPlayer(targetId).socket :
+        // if(targetId) return lobby.getPlayer(targetId).socket.send(wrapMessage(data))
+        // lobby.host.socket.send(wrapMessage(data))//
+
+        console.log("routeDataToSocket: ", playerId, targetId)
+
+        const socket = playerId === 'host' ?
+            lobby.getPlayerById(targetId).socket :
             lobby.host.socket
 
         socket.send(wrapMessage(data))
@@ -36,7 +40,8 @@ export default function messageHandler(data, socket) {
     switch(message.type){
 
         case CONSTANTS.CREATE_WEBSOCKET_CONNECTION:
-
+            /// /console.log('create websocket connection triggered')
+            console.log('create ws message:  ', message)
             if(message.metadata.user === 'host') {
                 // lobby = new Lobby(message.metadata, socket)
                 lobby = LobbyHandler.generateLobby(message.metadata, socket) //needs to return a lobby
@@ -55,13 +60,10 @@ export default function messageHandler(data, socket) {
                 lobby = LobbyHandler.getLobby(message.metadata.lobbyId)
                 const playerId = lobby.addPlayer(socket)
                 const hostSocket = lobby.host.socket
-                const initState = lobby.getPlayerInventory(playerId)
-                const inventorySliceData = generateInventorySliceData(initState)
-                    // lobby.getPlayer(playerId)
+                // const inventorySliceData = generateInventorySliceData()
 
-                // console.log(inventorySliceData)
-
-
+                //sends a dispatch to be picked up by the websocket middleware,
+                //the result of which dispatches over socket with data
                 socket.send(wrapMessage({
                     type: 'websocket/setupWebsocket',
                     payload: {
@@ -70,104 +72,145 @@ export default function messageHandler(data, socket) {
                         playerId
                     }
                 }))
-                socket.send(wrapMessage({
-                    type: 'inventory/synchronizePacksData',
-                    payload: inventorySliceData,
-                    // isHost: false,
-                    metaData: {
-                        playerId
-                    }
-                }))
+
                 hostSocket.send(wrapMessage({
-                    type: 'inventory/synchronizePacksData',
-                    payload: inventorySliceData,
-                    // isHost: true,
-                    metaData: {
+                    type: 'websocket/requestCharacterList',
+                    payload: {
                         playerId,
-                        name: lobby.getPlayer(playerId).name
+                        campaign: lobby.campaign
                     }
                 }))
             }
-
-            //create new websocket connection and add it to list of current connections
-
-            //if it already exists, connect to it
-
-
-            console.log('create websocket connection triggered')
-
             break
 
         case CONSTANTS.SEND_WEBSOCKET_MESSAGE:
-            const {metadata, subAction} = message //
+            const {metadata, subAction} = message
 
-            console.log(message)
-            console.log("SUBACTION SENT: ", subAction.type)
+            console.log('message variable inside "send message" switch case:  ', message)
+            // console.log("SUBACTION SENT: ", subAction.type)//
+            let target
 
             switch(subAction.type) {
                 case CONSTANTS.INCREMENT_ITEM:
                 case CONSTANTS.DECREMENT_ITEM:
-
-                    const targetPlayer = subAction.payload.playerId
-                    routeDataToSocket(metadata, subAction, targetPlayer)
+                    target = subAction.payload.playerId
+                    routeDataToSocket(metadata, subAction, target)
                     break
 
                 case CONSTANTS.ADD_ITEM://will only ever go to 1 person//if host send to target//if not host, send to host
-                    const {toPlayer} = subAction.payload
-                    console.log("TO PLAYER: ", toPlayer)
-                    routeDataToSocket(metadata, subAction, toPlayer)
+                    target = subAction.payload.toPlayer
+                    // console.log("TO PLAYER: ", target)
+                    routeDataToSocket(metadata, subAction, target)
                     break
                 case CONSTANTS.REMOVE_ITEM:
-                    const {fromPlayer} = subAction.payload
-                    console.log("FROM PLAYER: ", fromPlayer)
-                    routeDataToSocket(metadata, subAction, fromPlayer)
+                    target = subAction.payload.fromPlayer
+                    // console.log("FROM PLAYER: ", target)
+                    routeDataToSocket(metadata, subAction, target)///
+                    break
+                case CONSTANTS.REQUEST_CHARACTER_LIST:
+                    target = subAction.payload.playerId
+                    console.log(`a character list is being sent to user ${target}`)
+                    console.log('the data', {metadata, subAction})
+                    routeDataToSocket(metadata, subAction, target)
+                    break
+                case CONSTANTS.REQUEST_CHARACTER_INVENTORY:
+                    ////if sent from player
+                    const   lobby = LobbyHandler.getLobby(metadata.lobbyId)
+                    if(metadata.playerId !== 'host') {
+                        const character = metadata.selectedCharacter
+                        console.log("is New Char?", metadata)
+
+
+                        if (character.isNewCharacter) {
+                            // const player = lobby.getPlayerById(metadata.playerId)
+                            // lobby.linkCharacterToPlayer(character.value,  player)
+
+                            // player.characterId = character.value
+                            // lobby.host.socket.send(wrapMessage({
+                            //     type: 'websocket/hostAssociatePlayer',
+                            //     payload: {
+                            //         inventoryId: character.value,
+                            //         playerId: metadata.playerId
+                            //     }
+                            // }))
+                            const syncData = wrapMessage({
+                                type: 'inventory/synchronizeInventoryData',
+                                payload:  {
+                                    characterId: character.value,
+                                    characterName: character.name,
+                                    playerId:  metadata.playerId, // for the host
+                                    inventory: generateInventorySliceData(null)
+                                }
+                            })
+                            const playerSocket = lobby.getPlayerById(metadata.playerId).socket
+                            lobby.host.socket.send(syncData)
+                            playerSocket.send(syncData)
+                            //sends updated character ID to player based on host localStorage
+                            //server sends the constructed inventory to player and host
+
+
+                        } else {
+                            /**
+                             * request from player to the host -  player has selected a pre-existing character
+                             */
+                            console.log("rci, metadata for host: ", metadata)
+                            //sends character selection to get inventory
+                            lobby.host.socket.send(wrapMessage({
+                                type: 'websocket/requestCharacterInventory',
+                                payload: {
+                                    playerId: metadata.playerId,
+                                    campaign: metadata.campaign,
+                                    selectedCharacter: metadata.selectedCharacter
+                                }
+                            }))
+
+                        }
+                        //if sent from host
+                    } else {
+                        /**
+                         * the host response to a request for character inventory
+                         *
+                         */
+
+                        const p = subAction.payload
+                            // updatedPlayerId = p.character.characterId
+
+                        //server links the player's socket to ID sent from host
+                        // lobby.updatePlayerKey(p.playerId, updatedPlayerId)
+                        //server takes inventory data, crafts an inventory with the builder
+                        const constructedInventory = generateInventorySliceData(null)
+                        //server sends the constructed inventory to the host
+                        const syncData = wrapMessage({
+                            type: 'inventory/synchronizeInventoryData',
+                            payload: {
+                                // name: lobby.getPlayerById(metadata.playerId).name,
+                                // playerId: updatedPlayerId,=
+                                characterId: p.character.characterId,
+                                characterName: p.character.name,
+                                playerId: p.playerId, // this is for the host to associate websocket IDs with characters
+                                inventory: constructedInventory
+                            }
+                        })
+                        const playerSocket = lobby.getPlayerById(metadata.playerId).socket
+                        lobby.host.socket.send(syncData)
+                        playerSocket.send(syncData)
+                        //sends updated character ID to player based on host localStorage
+                        // playerSocket.send(wrapMessage({
+                        //     type: 'websocket/requestCharacterInventory',
+                        //     payload: {
+                        //         characterId: p.character.characterId
+                        //     },
+                        // }))
+                        //server sends the constructed inventory to player and host
+
+
+                    }
+
+                    break
+                case CONSTANTS.REQUEST_NEW_INVENTORY:
+                    // generateInventorySliceData()
                     break
             }
-            /*******************************************
-            const {fromPlayer, toPlayer, item} = subAction.payload
-
-            console.log("SUBACTION SENT: ", subAction.type)
-            console.log("FROM PLAYER: ", fromPlayer)
-            console.log("TO PLAYER: ", toPlayer)
-
-            if(user === 'host') { // the message is from the host to the players
-
-                if(fromPlayer === toPlayer || item.isResult  ) { // if only affecting 1 inventory then only target 1 player
-                    //or if item is a search result, send the "add item" to target player
-                    lobby.getPlayer(toPlayer).socket.send(wrapMessage(subAction))
-                } else {
-
-                    const fromPlayerSocket = lobby.getPlayer(fromPlayer).socket
-                    fromPlayerSocket.send(wrapMessage(subAction))
-
-                    const toPlayerSocket = lobby.getPlayer(toPlayer).socket
-                    toPlayerSocket.send(wrapMessage(subAction))
-                }
-            } else {
-                // get the correct game
-
-                const hostSocket = lobby.host.socket
-                // const playerSocket = lobby.getPlayer(playerId).socket
-                // send the data to the correct sockets
-                hostSocket.send(wrapMessage(subAction))
-            }
-
-            **********************************************************/
-
-            //filter current games on server for correct one
-
-            //determine who is recipient of data
-
-            //bundle any relevant information
-
-            //send the payload data
-            // socket.send(wrapMessage({
-            //     type: 'websocket/setLobbyId',
-            //     payload: {
-            //         uuid: nanoid()
-            //     }
-            // }))
-
             break
         default:
             console.log('message type not recognized')
