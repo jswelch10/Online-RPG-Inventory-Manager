@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 //TODO: maybe needs {packIds} param?
 export default function Inventory(props) {
 
-    console.log("inventory props:", props.playerId || 'tourist')
+    // console.log("inventory props:", props.playerId || 'tourist')
 
     const playerId = props.playerId || 'tourist'
     const characterId = props.characterId || 'tourist'

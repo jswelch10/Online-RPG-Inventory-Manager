@@ -14,6 +14,13 @@ const   app = express(),
         wsServer = new WebSocketServer({noServer: true}),
         lobbyHandler = LobbyHandler
 
+function errorHandler(err, req, res, next) {
+    if(res.headersSent) {
+        return next(err)
+    }
+    res.status(500)
+    res.render('error', {error: err})
+}
 
 //TODO: track IP address to limit open websocket servers
 
@@ -34,32 +41,19 @@ wsServer.on('connection', (socket, req) => {
 
 
     socket.on('message', message => {
-        // console.log('serverjs, socket.on message', message.toString())
         messageHandler(message, socket)
-
-
-        // const receivedData = JSON.parse(message)
-        // console.log(receivedData)
-
-        //
-        //     socket.send(JSON.stringify({
-        //         type: "RECEIVED_WEBSOCKET_MESSAGE",
-        //         data: {
-        //             type: 'websocket/setLobbyId',
-        //             payload: {
-        //                 uuid
-        //             }
-        //         }
-        //
-        //     }))
-        // }
+    })
+    socket.on('error', console.error)
+    socket.on('close', e => {
+        // closeHandler()
+        console.log(e)
     })
 })
 
-
+app.use(errorHandler)
 
 app.get('/', (req, res) => {
-    // res.send('Hello World!')
+    // res.send('Hello World!')/
     res.sendFile(path.join(__dirname, '../frontend/dist/index.html'))
 })
 

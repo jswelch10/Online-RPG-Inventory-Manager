@@ -42,6 +42,7 @@ export const websocketMiddleware = storeAPI => {
             case 'SEND_WEBSOCKET_MESSAGE':
                 //this should wrap payload with metadata
 
+                console.log(action)
 
                 action.metadata = {
                     lobbyId: state.websocket.lobbyId,
@@ -53,6 +54,7 @@ export const websocketMiddleware = storeAPI => {
 
                 socket.send(JSON.stringify(action)) //probably errors
                 action = action.subAction
+                if(action.type === 'websocket/disconnect') socket.close()
                 break
 
             //when the server sends data and the websocket uses store dispatch
@@ -66,14 +68,12 @@ export const websocketMiddleware = storeAPI => {
                     // if the server needs info from the host, they will grab it here.
                     let data
                     switch (action.type) {
-                        // host intercepts this dispatch and gives a shallow player list to the server
-
-                        case 'websocket/requestCharacterList':
+                        case 'websocket/getCharacterListFromHost':
                             console.log('trigger 3: ', action.payload)
                             data = {
                                 type: 'SEND_WEBSOCKET_MESSAGE',
                                 subAction: {
-                                    type: action.type,
+                                    type: 'websocket/sendCharacterListToPlayer',
                                     payload: {
                                         playerId: action.payload.playerId, // this is where it should go
                                         characters: {}
@@ -85,44 +85,47 @@ export const websocketMiddleware = storeAPI => {
                                 }
 
                             }
-                            console.log('inside wm, rcl, received payload: ', action.payload)
+                            console.log('inside websocketMiddleware, received payload: ', action.payload)
                             const {characters} = JSON.parse(window.localStorage.getItem(action.payload.campaign.value))
                             if (Object.keys(characters).length !== 0) {
                                 for (const character in characters) {
-                                    data.subAction.payload.characters[character] = characters[character].characterName
+                                    data.subAction.payload.characters[character] = {
+                                        characterName: characters[character].characterName,
+                                        isActive: state.websocket.characters[character]?.isActive
+                                    }
                                 }
                             }
                             console.log('inside wm, sending payload: ', data)
                             socket.send(JSON.stringify(data))
                             break
-                        case 'websocket/requestCharacterInventory':
-                            console.log('trigger 4')
-                            console.log('inside wm, rci, received payload: ', action.payload)
+                        case 'websocket/getCharacterInventoryFromHost':
                             data = {
-                                type: 'SEND_WEBSOCKET_MESSAGE',
+                                type:'SEND_WEBSOCKET_MESSAGE',
                                 subAction: {
-                                    type: action.type,
+                                    type: 'websocketMiddleware/sendCharacterInventoryToServer',
                                     payload: {
-                                        playerId: action.payload.playerId, // self ref from requesting player
+                                        playerId: action.payload.requestPlayerId, // the player that should receive this data
                                     }
                                 },
                                 metadata: {
                                     lobbyId: state.websocket.lobbyId,
-                                    playerId: state.websocket.playerId      //will always be host
+                                    playerId: state.websocket.playerId // always === 'host'
                                 }
                             }
                             const p = action.payload
-                            const characterId = p.selectedCharacter.value
-                            const {name, inventory} = JSON.parse(window.localStorage.getItem(p.campaign.value)).characters[charId]
+                            const characterId = p.character.value
+                            console.log('wsm rci, characterId: ', characterId)
+                            const {characterName, inventory} = JSON.parse(
+                                window.localStorage.getItem(p.campaign.value)
+                                    ).characters[characterId]
+
                             data.subAction.payload.character = {
                                 characterId,
-                                name,
+                                characterName,
                                 inventory
                             }
                             console.log('inside wm, sending payload: ', data)
                             socket.send(JSON.stringify(data))
-
-                            break
                     }
                 }
 

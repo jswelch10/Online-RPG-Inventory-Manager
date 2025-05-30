@@ -26,3 +26,14 @@
 .lobby-id span {
     font-weight: bold;
 }
+.player-list li:after {
+    content: " \0058";
+    color: red;
+}.player-list li.isActive:after {
+    content: " \2714";
+    color: green;
+}
+ #character-selector option.isActive {
+     text-decoration: line-through;
+     pointer-events: none;
+ }

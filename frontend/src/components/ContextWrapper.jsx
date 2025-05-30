@@ -6,6 +6,7 @@ import TooltipOverlay from "./Tooltip-Overlay";
 import {useDispatch, useSelector} from "react-redux";
 import {useWsDispatch} from "../redux_middleware/websocketMiddleware";
 import {nanoid} from "@reduxjs/toolkit";
+import GameControls from "./GameControls"
 
 
 export default function ContextWrapper(props) {
@@ -106,7 +107,7 @@ export default function ContextWrapper(props) {
                     autoScroll={false}
         >
             <Search />
-
+            <GameControls isWSConnected={isWSConnected} characterId={props.characterId} />
             {props.children}
 
             <TooltipOverlay />

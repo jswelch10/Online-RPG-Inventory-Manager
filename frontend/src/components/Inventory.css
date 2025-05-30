@@ -1,7 +1,7 @@
 .inventory {
     display: grid;
     margin: auto ;
-    width: 1300px;
+    width: calc(1300px * var(--scale-mod));
     grid-template-rows: 1fr 1fr 1fr;
     grid-auto-flow: column;
 }

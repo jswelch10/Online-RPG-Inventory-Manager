@@ -10,26 +10,40 @@ import HostLobbyView from "./views/HostLobbyView";
 import PlayerLobbyView from "./views/PlayerLobbyView";
 function App() {
     const   currentView = useSelector((state) => state.view.currentView),
-            {characterId, playerId} = useSelector(state => state.websocket)
+            {
+                // characterId,
+                playerId} = useSelector(state => state.websocket),
+            inventory = useSelector(state => state.inventory),
+            characterId = Object.keys(inventory)[0]
+            console.log('app characterId: ', characterId)
+
 
             // inventory = useSelector(state => state.inventory)
             // inventoryId = inventory[Object.keys(inventory)[0]]
-            console.log('app, characterId: ', characterId, playerId)
+            // console.log('app, characterId: ', characterId, playerId)
 
     function getView(expr) {
         switch (expr) {
 
             case 'test':
-                return <ContextWrapper><Banner /><PlayerGameView /></ContextWrapper>
+                return  <ContextWrapper>
+                            <Banner />
+                            <PlayerGameView />
+                        </ContextWrapper>
             case 'lobby':
             case 'lobby-host':
                 return <HostLobbyView />
             case 'lobby-player':
                 return <PlayerLobbyView />
             case 'host':
-                return <ContextWrapper><HostGameView /></ContextWrapper>
+                return  <ContextWrapper characterId={characterId}>
+                            <HostGameView />
+                        </ContextWrapper>
             case 'player':
-                return <ContextWrapper><PlayerGameView characterId={characterId} playerId={playerId}/></ContextWrapper>
+                return  <ContextWrapper characterId={characterId}>
+                            <PlayerGameView characterId={characterId}
+                                            playerId={playerId}/>
+                        </ContextWrapper>
             default:
                 console.log(`"${expr}" view not found`)
         }

@@ -42,9 +42,9 @@ export default function Item (props) {
             'shift': e.shiftKey
         };
         if(isWSConnected){
-            wsDispatch(incrementItem({packIndex, itemIndex, mods, characterId}))
+            wsDispatch(incrementItem({packIndex, itemIndex, mods, characterId, playerId}))
         } else {
-            dispatch(incrementItem({packIndex, itemIndex, mods, characterId}))
+            dispatch(incrementItem({packIndex, itemIndex, mods, characterId, playerId}))
         }
 
 

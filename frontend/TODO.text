@@ -1,19 +1,22 @@
 TODO:
 
 REFINE SCOPE - WHAT IS ABSOLUTE MINIMUM VIABLE PRODUCT (AMVP)
-    react router,
-        join game url
-    handle websocket crashes
-    create items
-    add weapons
-    persistent state and player inventory matching
-        perhaps a playerlobby pt.2 to select player
-            host would need kick player for trolls?
-    different app views should affect page history - probably done with react routing
-    basic server security
-    push to git repo,
-    create website with app
-    obvious bugs
+    GENERAL:
+        remove testing info from app, i.e. IDs etc..
+        create website with this app
+        create items - saved to localStorage
+        add weapons
+        clean up code for production
+    HOST:
+        Control options for host i.e. kick/delete player/character
+    PLAYER:
+    SERVER:
+        what happens when server crashes? does it auto restart?
+        security?
+    BUGS:
+        different browser testing for CSS
+        armor?
+        tooltip
 
 search for item function
 SHOP:
@@ -58,8 +61,7 @@ websocket
 
 lobby
     host lobby:
-        create existing campaign populates inventories with persisted data
-        quick copy of lobbyId for pasting || or just create a join link if react router is working
+        quick copy of lobbyId for pasting || create a join link if react router is working
 
         delete campaign
         delete player in campaign - is this needed?
@@ -80,6 +82,9 @@ storage
     load/save
 
 refinement:
+    react router,
+        join game via url paste
+        different app views should affect page history - probably done with react routing
 
     sanitize inputs - lobby page
     decide which react states belong in redux
@@ -88,6 +93,7 @@ bugs:
 
 COOL BUT OUT OF SCOPE:
     container items as packs
+    packs movable / removable
 
 
 

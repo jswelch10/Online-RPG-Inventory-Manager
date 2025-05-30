@@ -1,4 +1,4 @@
-// import './HostView.css'
+import './HostView.css'
 import react from 'react'
 import {useSelector} from 'react-redux'
 import ContextWrapper from "../components/ContextWrapper";
@@ -28,17 +28,18 @@ function HostGameView() {
         }
     }
     // console.log(playersArr)
-    const playersRender = playersArr.length > 0 ? playersArr.filter(player => player.playerId !== 'tourist').map(player => {
+    const playersRender = playersArr.length > 0 ? playersArr.filter(player => player.playerId !== 'tourist').map((player, i, players) => {
         // console.log("inside host view playersrender: ", player)
-        return <>
-
+        return <div className={'host-view--player'}
+                    // style={{scale: `${1/players.length}`}}
+        >
             <PlayerGameView key={player.playerId}
                             playerId={player.playerId}
                             characterId={player.characterId}
             >
                 <h1>{`${player.characterName}: ${player.playerId}: ${player.characterId}`}</h1>
             </PlayerGameView>
-        </>
+        </div>
     }) : null
 
 

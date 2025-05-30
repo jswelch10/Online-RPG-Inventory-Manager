@@ -1,8 +1,8 @@
-import react, {useRef, useState} from "react";
+import react, {useRef, useState, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import './LobbyView.css'
 import {changeView, toHostGameView, toTestPage} from "../slices/viewSlice";
-import {setupGameData} from "../slices/websocketSlice";
+import {disconnect, setupGameData} from "../slices/webSocketSlice";
 import {useWsDispatch} from "../redux_middleware/websocketMiddleware";
 
 export default function HostLobbyView () {
@@ -11,6 +11,7 @@ export default function HostLobbyView () {
         [isLobbyCreated,setIsLobbyCreated] = useState(false),
         [isCreateBtnDisabled, setIsCreateBtnDisabled] = useState(true),
         [isNewCampaign, setIsNewCampaign] = useState(false),
+        [helpText, setHelpText] = useState(null),
         campaignNameRef = useRef(''),
 
         dispatch = useDispatch(),
@@ -19,7 +20,11 @@ export default function HostLobbyView () {
         lobbyId = useSelector(state=> state.websocket.lobbyId) || 'ABC123XYZ',
         characters = useSelector(state => state.websocket.characters) || null
 
-    // console.log('players log: ', players)
+    console.log('characters: ', characters)
+
+    // useEffect(()=>{
+    //
+    // }, [characters])
 
 
     const handleCampaignSelectChange = e => {
@@ -35,8 +40,9 @@ export default function HostLobbyView () {
         })
     }
 
-    const input = isNewCampaign ?
+    const input = isNewCampaign ? <>
         <input type="text" placeholder={'enter campaign name'} ref={campaignNameRef}/>
+        </>
         : null
 
     const renderCampaignOptions = () => {
@@ -58,18 +64,27 @@ export default function HostLobbyView () {
         if(isNewCampaign) {
             // console.log("new campaign logic triggered")
             const newCampaignName = campaignNameRef.current.value
-            gameInfo = {
-                isNewCampaign,
-                name: newCampaignName,
-                value: newCampaignName.replace(/\s+/g, '-').toLowerCase(),
-            }
-            // console.log("new details: ", gameInfo)
+            // if(newCampaignName.match(/^[a-zA-Z',]+(\s[a-zA-Z',]+)*$/)) {
+                gameInfo = {
+                    isNewCampaign,
+                    name: newCampaignName,
+                    value: newCampaignName.replace(/\s+/g, '-').toLowerCase(),
+                }
+                // console.log("new details: ", gameInfo)
 
-            window.localStorage.setItem(gameInfo.value, JSON.stringify({
-                name:gameInfo.name,
-                characters: {}
-            }))
-
+                window.localStorage.setItem(gameInfo.value, JSON.stringify({
+                    name: gameInfo.name,
+                    characters: {}
+                }))
+            // } else  {
+            //     console.log(campaignNameRef.current.getAttribute('placeholder'))
+            //     campaignNameRef.current.value = ''
+            //     setHelpText(
+            //         <p>only letters, commas, apostrophes allowed<br></br>e.g. "Act One, Hero's Journey"</p>
+            //     )
+            //
+            //     throw new Error('Bad Campaign Name: client')
+            // }
             //else campaign is not new, server generates inventory for rejoining player,
             // based on  data saved by host in localstorage
         } else {
@@ -101,12 +116,28 @@ export default function HostLobbyView () {
     }
 
     const renderCharacters = (characters) => {
-        console.log(characters)
-        const playersArr = []
+        // console.log(characters)
+        // const key = campaign.value
+        // const characterIds = JSON.parse(window.localStorage.getItem(key)).characters
+
+
+        // const characterArr = []
+        // for(const characterId in characterIds) {
+        //     characterArr.push(<li>{characterIds[characterId].characterName}</li>)
+        // }
+        // return characterArr
+
+
+        const charactersArr = []
         for(const characterId in characters) {
-            playersArr.push(<li>{characters[characterId].name}</li>)
+            const c = characters[characterId]
+            if(c.characterName) {
+                charactersArr.push(<li className={c.isActive ? 'isActive' : null}>{c.characterName}</li>)
+            } else {
+                charactersArr.push(<li>{characters[characterId]}</li>)
+            }
         }
-        return playersArr
+        return charactersArr
     }
     const renderComponents = () => {
         return isLobbyCreated ? <>
@@ -129,15 +160,21 @@ export default function HostLobbyView () {
                     <option value="new-campaign">Create New Campaign</option>
                 </select>
                 {input}
+                {helpText}
                 <button disabled={isCreateBtnDisabled} onClick={createLobby}>Create Lobby</button>
             </>
+    }
+
+    const wsToTestPage = () => {
+        if(isLobbyCreated) wsDispatch(disconnect())
+        dispatch(toTestPage())
     }
 
     return (<>
         <div className="lobby-view">
             <div className="lobby-info">
                 {renderComponents()}
-                <button onClick={()=>{dispatch(toTestPage())}}>back</button>
+                <button onClick={wsToTestPage}>back</button>
             </div>
         </div>
     </>)

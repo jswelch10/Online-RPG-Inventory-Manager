@@ -1,0 +1,18 @@
+.host-view {
+    --scale-mod: .5
+}
+
+.host-view ul {
+    padding: 0;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1300px;
+    margin: auto;
+}
+.host-view h1 {
+    font-size: calc(36px * var(--scale-mod))
+}
+
+.host-view--player {
+
+}

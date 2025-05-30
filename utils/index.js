@@ -54,7 +54,7 @@ export default function generateInventorySliceData(initState = null) {
         return pack
     }
 
-    return [
+    return initState || [
             placeItemInPack({size:1, startSlot:2}), //TODO: remove startSlot maybe?
             placeItemInPack({size:2, startSlot:1}),
             placeItemInPack({size:3, startSlot:0}),

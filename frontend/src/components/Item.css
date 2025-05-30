@@ -1,10 +1,16 @@
 .item-stack-ui {
     display: grid;
-    grid-template-columns: 24px auto 24px;
+    grid-template-columns: calc(24px * var(--scale-mod)) auto calc(24px * var(--scale-mod));
     width: 100%;
+    font-size: calc(16px * var(--scale-mod))
 }
 
 .item-stack-count {
     text-align: center;
     user-select: none;
+}
+.stack-count-button {
+    height: calc(25px * var(--scale-mod));
+    width: calc(25px * var(--scale-mod));
+    padding: 0;
 }

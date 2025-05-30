@@ -6,11 +6,33 @@ export default class Lobby {
         this.host = {
             socket
         }
+        /* convert metadata.campaign.characters
+        to
+        characters = {
+            [characterName]: {
+                isActive: false
+            }
+        } */
+        console.log('characters', metadata.campaign.characters)
+        // this.characters = metadata.campaign.characters ? Object.keys(metadata.campaign.characters).reduce((acc, curr) => {
+            // console.log('acc', acc, 'curr', curr, 'i', i)
+            // acc[curr] = { //
+            //     isActive: false
+            // }
+            // return acc
+        // }, {}) : {}
+        // console.log('reducer stuff',this.characters)
+        // this.characters = Object.keys(metadata.campaign.characters).map(character => {
+        //
+        // })
         ///
-        console.log(metadata)
-        this.players = (metadata.campaign.isNewCampaign) ?
-            new Map() :
-            new Map(Object.entries(metadata.campaign.characters)) // redo?
+        // console.log(metadata)
+        this.players = new Map()
+            // (metadata.campaign.isNewCampaign) ?
+            // new Map() :
+            // new Map(Object.entries(metadata.campaign.characters)) // redo?
+        //TODO: players should be as map of playerIds, yet on creation it can be a map of characterIds
+        // console.log(this.players)
 
     }
     updatePlayerKey(id1, id2){ // relevance after switching to player id AND inventory ID, no need to update, only to associate
@@ -31,6 +53,7 @@ export default class Lobby {
             // name: characterName,
             socket
         })
+        console.log(this.players)
         return id
     }
     // getPlayerByCharacter(character) {
@@ -42,18 +65,22 @@ export default class Lobby {
     }
 
     getPlayers() {
-        const players = {}
-        this.players.forEach(player => {
+        // const players = {}
+        // this.players.forEach(player => {
+        //
+        // })
+        // return players
 
-        })
-        return players
     }
 
     getPlayerInventory(id) {
         return this.players.get(id).inventory
     }
     removePlayer(id) {
-
+        this.players.delete(id)
     }
+    // close() {
+    //
+    // }
 }
 

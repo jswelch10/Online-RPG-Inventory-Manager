@@ -70,21 +70,21 @@ export default function Pack ({slotNumber, packData, characterId, playerId}) {
 
             </div>
 
-            <div className="containerStatus">
-                <div className="statusOption option1">
-                    <input type="radio" name={`containerStatus-${slotNumber+1}`} value={"equipped"}/>
-                    {/*<label htmlFor="equip">Equipped</label>*/}
-                </div>
-                <div className="statusOption option2">
-                    <input type="radio" name={`containerStatus-${slotNumber+1}`} value={"dropped"}/>
-                    {/*<label htmlFor="drop">Dropped</label>*/}
-                </div>
-                <div className="statusOption option3">
-                    <input type="radio" name={`containerStatus-${slotNumber+1}`} value={"lost"}/>
-                    {/*<label htmlFor="lost">Lost</label>*/}
-                </div>
+            {/*<div className="containerStatus">*/}
+            {/*    <div className="statusOption option1">*/}
+            {/*        <input type="radio" name={`containerStatus-${slotNumber+1}`} value={"equipped"}/>*/}
+            {/*        /!*<label htmlFor="equip">Equipped</label>*!/*/}
+            {/*    </div>*/}
+            {/*    <div className="statusOption option2">*/}
+            {/*        <input type="radio" name={`containerStatus-${slotNumber+1}`} value={"dropped"}/>*/}
+            {/*        /!*<label htmlFor="drop">Dropped</label>*!/*/}
+            {/*    </div>*/}
+            {/*    <div className="statusOption option3">*/}
+            {/*        <input type="radio" name={`containerStatus-${slotNumber+1}`} value={"lost"}/>*/}
+            {/*        /!*<label htmlFor="lost">Lost</label>*!/*/}
+            {/*    </div>*/}
 
-            </div>
+            {/*</div>*/}
         </div>
     )
 }

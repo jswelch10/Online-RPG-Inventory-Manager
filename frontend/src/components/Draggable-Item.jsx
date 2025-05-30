@@ -10,6 +10,7 @@ export default function DraggableItem({data, ...props}) {
     const {id} = data
     const [timeoutId, setTimeoutId] = useState(null)
     const [tooltipActive, setTooltipActive] = useState(false)
+    const scaleMod = Object.keys(useSelector(state => state.inventory)).length
     const dispatch = useDispatch()
 
 
@@ -35,12 +36,12 @@ export default function DraggableItem({data, ...props}) {
     id,
     data
     })
-    const scale =  1
-    const magic = Math.sqrt(1/scale)
-    if(transform) {
-        transform.x *= magic
-        transform.y *= magic
-    }
+    // const scale =  scaleMod > 2 ? 2 : 1
+    // const magic = Math.sqrt(scale)
+    // if(transform) {
+    //     transform.x *= magic
+    //     transform.y *= magic
+    // }
     const style = transform ? {
         zIndex:50,
         transform: CSS.Translate.toString(transform),

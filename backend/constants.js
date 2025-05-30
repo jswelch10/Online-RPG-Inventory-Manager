@@ -14,7 +14,23 @@ const CONSTANTS = {
 
     REQUEST_CHARACTER_LIST: 'websocket/requestCharacterList',
     REQUEST_CHARACTER_INVENTORY: 'websocket/requestCharacterInventory',
-    REQUEST_NEW_INVENTORY: 'inventory/requestNewInventory',
+    /////////////////////////////////////////////////////////
+
+
+    GET_CHARACTER_LIST_FROM_HOST: 'websocket/getCharacterListFromHost',
+    SEND_CHARACTER_LIST_TO_PLAYER: 'websocket/sendCharacterListToPlayer',
+
+    SEND_NEW_CHARACTER_TO_HOST: 'websocket/sendNewCharacterToHost',
+
+
+    GET_CHARACTER_INVENTORY_FROM_HOST: 'websocket/getCharacterInventoryFromHost',
+
+    SEND_CHARACTER_INVENTORY_TO_HOST: 'websocket/sendCharacterInventoryToHost',
+    SEND_CHARACTER_INVENTORY_TO_PLAYER: 'websocket/sendCharacterInventoryToPlayer',
+    SEND_CHARACTER_INVENTORY_TO_SERVER: 'websocketMiddleware/sendCharacterInventoryToServer',
+
+    DISCONNECT: 'websocket/disconnect'
+
 
 }
 

@@ -19,8 +19,12 @@ class LobbyHandler {
         return this.#lobbies.get(id)
     }
 
-    remove(id) {
-        delete this.#lobbies[id]
+    // remove(id) {
+    //     delete this.#lobbies[id]
+    // }
+    closeLobby(id) {
+        // this.#lobbies.get(id).close
+        this.#lobbies.delete(id)
     }
 }
 

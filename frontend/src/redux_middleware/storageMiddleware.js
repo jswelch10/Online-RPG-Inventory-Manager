@@ -58,6 +58,7 @@ export const storageMiddleware = store => next => action => {
                 // console.log('key: ', key, 'value: ', value)
                 //localStorage.set(state.websocket)
                 window.localStorage.setItem(key, valueString)
+                console.log('state saved to storage')
                 return result
 
             default:

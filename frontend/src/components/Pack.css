@@ -15,19 +15,19 @@
     display:flex;
     flex-direction: row-reverse;
     align-items: center;
-    font-size: 45px;
+    font-size: calc(45px * var(--scale-mod));
     font-family: monospace;
     margin: 0 10px;
 }
 .containerName {
-    height: 60px;
-    width:120px;
-    font-size: 24px;
+    height: calc(60px * var(--scale-mod));
+    width:calc(120px * var(--scale-mod));
+    font-size: calc(24px * var(--scale-mod));
 
 }
 .containerData input {
     text-align: center;
-    margin:20px;
+    margin:calc(20px * var(--scale-mod));
     border: none;
 }
 .pack {
@@ -39,11 +39,11 @@
     position: relative;
     align-items: center;
     place-self: center;
-    margin: 20px;
+    margin: calc(20px * var(--scale-mod));
 }
 .pack-background {
-    width: 400px;
-    height: 150px;
+    width: calc(400px * var(--scale-mod));
+    height: calc(150px * var(--scale-mod));
     background-color: lightseagreen;
     justify-content: center;
     /*border: solid 2px black;*/
@@ -56,19 +56,19 @@
 }
 .pack-items {
     position:absolute;
-    top:50px;
-    left:55px;
+    top:calc(50px * var(--scale-mod));
+    left:calc(55px * var(--scale-mod));
     justify-content: start;
 
-    gap:30px;
+    gap:calc(30px * var(--scale-mod));
     margin:0px;
-    width: 330px;
-    height: 90px
+    width: calc(330px * var(--scale-mod));
+    height: calc(90px * var(--scale-mod))
 
 }
 .pack .join-bar-bg {
     width: 63.333%;
-    height: 80px;
+    height: calc(80px * var(--scale-mod));
     background-color: white;
     position:absolute;
     top:50%;
@@ -78,10 +78,10 @@
 
 }
 .pack .pack-segment-bg {
-    height: 100px;
-    width: 100px;
+    height: calc(100px * var(--scale-mod));
+    width: calc(100px * var(--scale-mod));
     background-color: white;
-    margin-right: 20px;
+    margin-right: calc(20px * var(--scale-mod));
     display:flex;
 }
 
@@ -102,7 +102,7 @@
 }
 .statusOption {
     display:flex;
-    margin: 10px 0;
+    margin: calc(10px * var(--scale-mod)) 0;
 }
 
 .armorData {
@@ -119,13 +119,13 @@
     background-color: #293132;
 }
 .armorData p {
-    /*padding: 5px;*/
+    font-size: calc(16px * var(--scale-mod));
     background-color: white;
     clip-path: polygon(0px 0, 100% 0, calc(100% - 20px) 100%, 20px 100%);
-    padding: 5px 40px;
+    padding: calc(5px * var(--scale-mod)) calc(40px * var(--scale-mod));
     margin: 0;
     font-weight: bold;
-    transform: translateY(-1px);
+    transform: translateY(calc(-1px * var(--scale-mod)));
 }
 .armorData--4, .armorData--5 p {
     background-color: darkgray;
@@ -144,6 +144,7 @@
 }
 .slot-item--1,.slot-item--2,.slot-item--3 {
     /*z-index: 10*/
+    text-wrap: auto;
     display:flex;
     flex-direction: column;
     justify-content: space-between;
@@ -151,19 +152,19 @@
 }
 .slot-item--1 {
     background-color: red;
-    width:90px;
-    height: 90px;
+    width:calc(90px * var(--scale-mod));
+    height: calc(90px * var(--scale-mod));
 }
 .slot-item--2 {
     background-color: green;
-    width:210px;
-    height: 90px;
+    width:calc(210px * var(--scale-mod));
+    height: calc(90px * var(--scale-mod));
     /*margin:auto;*/
 }
 .slot-item--3 {
     background-color: blue;
-    width:330px;
-    height: 90px;
+    width:calc(330px * var(--scale-mod));
+    height: calc(90px * var(--scale-mod));
     /*margin:auto;*/
 }
 .draggable-item {

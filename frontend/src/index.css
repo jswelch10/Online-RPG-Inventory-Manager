@@ -1,3 +1,12 @@
+@property --scale-mod {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 1;
+}
+/*:root {*/
+/*  --scale-mod: 1;*/
+/*}*/
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

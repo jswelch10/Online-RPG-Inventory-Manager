@@ -319,6 +319,7 @@
   },
   {
     "id":"climbers_kit",
+    "fix": true,
     "name": "Climber's Kit",
     "cost": {
       "type": "gold",
@@ -385,6 +386,7 @@
   },
   {
     "id":"diplomats_pack",
+    "fix": true,
     "name": "Diplomat's Pack",
     "cost": {
       "type": "gold",
@@ -428,6 +430,7 @@
   },
   {
     "id":"dungeoneers_pack",
+    "fix": true,
     "name": "Dungeoneer's Pack",
     "cost": {
       "type": "gold",
@@ -438,6 +441,7 @@
   },
   {
     "id":"entertainers_pack",
+    "fix": true,
     "name": "Entertainer's Pack",
     "cost": {
       "type": "gold",
@@ -448,6 +452,7 @@
   },
   {
     "id":"explorers_pack",
+    "fix": true,
     "name": "Explorer's Pack",
     "cost": {
       "type": "gold",
@@ -791,6 +796,7 @@
   },
   {
     "id":"priests_pack",
+    "fix": true,
     "name": "Priest's Pack",
     "cost": {
       "type": "gold",
@@ -873,6 +879,7 @@
   },
   {
   "id":"scholars_pack",
+    "fix": true,
     "name": "Scholar's Pack",
     "cost": {
       "type": "gold",

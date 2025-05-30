@@ -82,18 +82,27 @@ export const inventorySlice = createSlice({
         //sorts host and players, takes care of host restructure on first pass
         //sorts host and players, destroys test if it exists
         synchronizeInventoryData: (state, action) => {
-            console.log("inside syncIData: ", current(state), action)
+            console.log("inside syncIData1: ", current(state), action)
             state[action.payload.characterId] = {
                 playerId: action.payload.playerId,
                 characterName: action.payload.characterName,
                 inventory: action.payload.inventory
             }
+            if(state['tourist']) delete state['tourist']
 
+            console.log("inside syncIData2: ", current(state), action)
 
-            if(state['tourist']) {
-                // console.log("deleting state")
-                delete state['tourist']
+            if(action.payload.isHost) {
+                const gameData = JSON.parse(window.localStorage.getItem(action.payload.campaign.value))
+                gameData.characters[action.payload.characterId] = {
+                    characterName: action.payload.characterName,
+                    inventory: action.payload.inventory
+                }
+
+                window.localStorage.setItem(action.payload.campaign.value, JSON.stringify(gameData))
             }
+
+
         },
         updatePackStatus: (state, action) => {
             const validValues = ["equipped", "dropped", "lost"]
@@ -101,6 +110,34 @@ export const inventorySlice = createSlice({
             if(validValues.includes(action.payload))
                 state.status = action.payload
         },
+        removeCharacter: (state,action) => {
+            console.log(action)
+            if (state.hasOwnProperty(action.payload)) {
+
+                delete state[action.payload]
+            } else {
+                let key
+                for (const k in state) {
+                    if (state[k].playerId === action.payload.playerId) {
+                        key = k
+                    }
+                }
+                delete state[key]
+            }
+            console.log('before the reset', current(state), Object.keys(state).length)
+            if(Object.keys(state).length === 0 && !action.payload.isHost) state['tourist'] = initialState['tourist']
+        },
+        reset: (state) => {
+            console.log('before', current(state))
+            console.log('istate', initialState)
+            Object.keys(state).forEach(key => {
+                delete state[key]
+            })
+            state['tourist'] = initialState['tourist']
+
+            console.log('after', current(state))
+
+        }
     },
 })
 
@@ -115,7 +152,9 @@ export const {
     addItem,
     removeItem,
     synchronizeInventoryData,
-    updatePackStatus
+    updatePackStatus,
+    removeCharacter,
+    reset
 } = inventorySlice.actions
 
 export default inventorySlice.reducer
